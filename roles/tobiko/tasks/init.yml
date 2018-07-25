@@ -69,7 +69,7 @@
 
 # --- Initialize plugins ------------------------------------------------------
 
-- include_tasks: "{{ tobiko_plugin }}/tobiko-plugin.yml"
+- include_tasks: "{{ tobiko_plugin }}.yml"
   with_items: "{{ tobiko_config.plugins }}"
   vars:
     tobiko_params:

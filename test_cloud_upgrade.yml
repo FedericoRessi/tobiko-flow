@@ -16,15 +16,15 @@
   tasks:
 
     - name: step 1 - setup cloud
-      include_tasks: tobiko/setup_cloud.yml
+      include_tasks: setup_cloud.yml
 
     - name: step 2 - populate test resources
-      include_tasks: tobiko/setup_test_resources.yml
+      include_tasks: setup_test_resources.yml
 
     - name: step 4 - upgrade cloud
-      include_tasks: tobiko/upgrade_cloud.yml
+      include_tasks: upgrade_cloud.yml
 
   post_tasks:
 
     - name: step 5 final cleanup
-      include_tasks: tobiko/cleanup.yml
+      include_tasks: cleanup.yml

@@ -1,5 +1,0 @@
-
----
-
-- name: run Tempest tests against OpenStack {{ tobiko_status.cloud.version }}
-  set_fact:
