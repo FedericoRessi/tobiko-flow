@@ -1,0 +1,8 @@
+
+---
+
+- name: "{{ tobiko_params.method }}"
+  include_tasks: "{{ tobiko_params.method }}.yml"
+  when:
+    - tobiko_params.method | default(false)
+    - not (tobiko_infrared_config[tobiko_params.method].skip | default(false))

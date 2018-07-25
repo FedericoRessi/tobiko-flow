@@ -1,0 +1,9 @@
+
+---
+
+- import_role:
+    name: tobiko
+  vars:
+    tobiko_params:
+      method: run_tests
+      tests: "{{ tobiko_run_tests | default('default') }}"

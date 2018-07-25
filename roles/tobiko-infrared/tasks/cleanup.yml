@@ -1,0 +1,16 @@
+
+---
+
+- name: cleanup OpenStack hypervisor host
+  include_tasks: exec.yml
+  vars:
+    tobiko_infrared_exec_params: >
+      virsh
+        --host-address "{{ tobiko_infrared_config.virsh.host_address }}"
+        --host-key "{{ tobiko_infrared_config.virsh.host_key }}"
+        --cleanup yes
+
+- name: remove files
+  file:
+    path: "{{ tobiko_infrared_default_config.log_file }}"
+    state: absent

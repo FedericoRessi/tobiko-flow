@@ -1,0 +1,7 @@
+
+---
+
+- name: "{{ tobiko_params.method }}"
+  include_tasks: "{{ tobiko_params.method }}.yml"
+  when:
+    - tobiko_params is defined

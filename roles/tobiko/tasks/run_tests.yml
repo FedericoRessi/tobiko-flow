@@ -1,0 +1,22 @@
+
+---
+
+- name: check cloud status
+  debug:
+    msg: |
+      Cloud status:
+        expected version is {{ tobiko_params.version }}
+        actual version is {{ tobiko_status.cloud.version }}
+  when: tobiko_params.version | default(false)
+  failed_when:
+    - tobiko_status.cloud.version != tobiko_params.version
+
+- name: "delegate {{ tobiko_params.method }} to plugins: {{ tobiko_params }}"
+  include_tasks: "{{ tobiko_run_tests_plugin }}/tobiko-plugin.yml"
+  vars:
+    tobiko_tests: >
+      {{ tobiko_config.run_tests.tests[tobiko_params.tests | mandatory] or
+         [] }}
+  with_items: "{{ tobiko_config.plugins }}"
+  loop_control:
+    loop_var: tobiko_run_tests_plugin

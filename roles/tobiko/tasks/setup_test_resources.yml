@@ -1,0 +1,16 @@
+
+---
+
+- name: "delegate {{ tobiko_params.method }} to plugins: {{ tobiko_params }}"
+  include_tasks: "{{ tobiko_plugin }}/tobiko-plugin.yml"
+  with_items: "{{ tobiko_config.plugins }}"
+  loop_control:
+    loop_var: tobiko_plugin
+
+- name: run tests after test resources setup
+  include_role:
+    name: tobiko
+  vars:
+    tobiko_params:
+      method: run_tests
+      tests: after_setup_test_resources

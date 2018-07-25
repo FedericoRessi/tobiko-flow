@@ -1,0 +1,73 @@
+
+---
+
+- name: put upgrade version to tobiko status
+  set_fact:
+    tobiko_status: >
+      {{ tobiko_status |
+         combine({
+           'cloud': {
+             'upgrade_version':
+               (tobiko_params.version or
+                tobiko_infrared_config.upgrade_cloud.version) | mandatory }},
+           recursive=True) }}
+
+- debug:
+    msg: "{{ tobiko_status }}"
+
+- name: incremental upgrade from version 7 to 8
+  include_tasks: upgrade/incremental.yml
+  vars:
+    initial_version: 7
+    final_version: 8
+  when:
+    - (tobiko_status.cloud.version | int) == 7
+
+- name: incremental upgrade from version 8 to 9
+  include_tasks: upgrade/incremental.yml
+  vars:
+    initial_version: 8
+    final_version: 9
+  when:
+    - (tobiko_status.cloud.version | int) == 8
+
+- name: incremental upgrade from version 9 to 10
+  include_tasks: upgrade/incremental.yml
+  vars:
+    initial_version: 9
+    final_version: 10
+  when:
+    - (tobiko_status.cloud.version | int) == 9
+
+- name: fast upgrade from version 10 to 13
+  include_tasks: upgrade/fast.yml
+  vars:
+    initial_version: 10
+    final_version: 13
+  when:
+    - (tobiko_status.cloud.version | int) == 10
+    - tobiko_params.fast | default(false)
+
+- name: incremental upgrade from version 10 to 11
+  include_tasks: upgrade/incremental.yml
+  vars:
+    initial_version: 10
+    final_version: 11
+  when:
+    - (tobiko_status.cloud.version | int) == 10
+
+- name: incremental upgrade from version 11 to 12
+  include_tasks: upgrade/incremental.yml
+  vars:
+    initial_version: 11
+    final_version: 12
+  when:
+    - (tobiko_status.cloud.version | int) == 11
+
+- name: incremental upgrade from version 12 to 13
+  include_tasks: upgrade/incremental.yml
+  vars:
+    initial_version: 12
+    final_version: 13
+  when:
+    - (tobiko_status.cloud.version | int) == 12

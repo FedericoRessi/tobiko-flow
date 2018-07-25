@@ -1,0 +1,17 @@
+
+---
+
+- name: incremental upgrade from {{ initial_version }} to {{ final_version }} complete
+  set_fact:
+    tobiko_status: >
+      {{ tobiko_status |
+         combine({'cloud': {'version': final_version }},
+                 recursive=True) }}
+
+- name: run tests during incremental upgrade
+  include_role:
+    name: tobiko
+  vars:
+    tobiko_params:
+      method: run_tests
+      tests: during_upgrade_cloud

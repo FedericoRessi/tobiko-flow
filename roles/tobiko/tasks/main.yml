@@ -1,0 +1,21 @@
+
+---
+
+- name: init
+  include_tasks: init.yml
+  when: tobiko_status is not defined
+
+- name: execute {{ tobiko_params }}
+  include_tasks: "{{ tobiko_params.method }}.yml"
+  when:
+    - tobiko_params.method | default(false)
+    - not (tobiko_config[tobiko_params.method].skip | default(false))
+
+- name: show tobiko_status
+  debug:
+    msg: "tobiko_status is {{ tobiko_status }}"
+
+- name: save status to {{ tobiko_config.status_file }} file - {{ tobiko_status }}
+  copy:
+    content: "{{ tobiko_status | to_nice_yaml }}"
+    dest: "{{ tobiko_config.work_dir }}/{{ tobiko_config.status_file }}"

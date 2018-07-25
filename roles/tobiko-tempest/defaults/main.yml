@@ -1,0 +1,11 @@
+
+---
+
+tobiko_tempest_default_config:
+
+  git_repo: "https://git.openstack.org/openstack/tempest"
+  src_dir: "{{ tobiko_config.work_dir }}/tempest/src"
+  venv_dir: "{{ tobiko_config.work_dir }}/tempest"
+  log_file: "{{ tobiko_config.log_dir }}/tempest.log"
+  tests: []
+  plugins: []

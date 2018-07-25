@@ -1,0 +1,14 @@
+
+---
+
+- name: "run Tempest tests: {{ tobiko_tests | join (', ') }}"
+  include_tasks: run_tests/tempest.yml
+  vars:
+    test_config: >
+      {{ tobiko_infrared_default_config.tempest["default"] |
+         combine(tobiko_infrared_config.tempest[test_config_name],
+                 recursive=True) }}
+  when: tobiko_test_name in tobiko_infrared_config.tempest
+  with_items: "{{ tobiko_tests }}"
+  loop_control:
+    loop_var: test_config_name

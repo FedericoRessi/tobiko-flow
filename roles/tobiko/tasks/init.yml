@@ -1,0 +1,78 @@
+
+---
+
+# --- Import config from file ------------------------------------------------
+
+- name: read {{ tobiko_config_file }} config file
+  include_vars:
+    file: "{{ tobiko_config_file }}"
+    name: tobiko_config_from_file
+  register: tobiko_read_config_file
+  ignore_errors: true
+  with_first_found:
+    - files:
+      - "{{ tobiko_config_file }}"
+      skip: true
+
+- name: combine config file with default config
+  set_fact:
+    tobiko_config: >
+      {{ tobiko_default_config |
+         combine(tobiko_config_from_file.tobiko | default({}),
+                 recursive=True)
+      }}
+  when: item | succeeded
+  with_items: "{{ tobiko_read_config_file.results }}"
+
+- debug:
+    msg: "tobiko_config is {{ tobiko_config }}"
+
+
+# --- Import status from file -------------------------------------------------
+
+- name: initialize default status
+  set_fact:
+    tobiko_status: "{{ tobiko_default_status }}"
+
+- name: read {{ tobiko_config.status_file }} status file
+  slurp:
+    src: "{{ tobiko_config.work_dir }}/{{ tobiko_config.status_file }}"
+  register: _tobiko_read_status_file
+  ignore_errors: true
+  with_first_found:
+    - files:
+      - "{{ tobiko_config.work_dir }}/{{ tobiko_config.status_file }}"
+      skip: true
+
+- name: combine status file with default status
+  set_fact:
+    tobiko_status: >
+      {{ tobiko_status |
+         combine((item['content'] | b64decode | from_yaml), recursive=True) }}
+  when: item | succeeded
+  with_items: "{{ _tobiko_read_status_file.results }}"
+
+- debug:
+    msg: "tobiko_status is {{ tobiko_status }}"
+
+
+# --- Initialize working directories
+
+- name: create {{ tobiko_config.work_dir }} directory
+  file:
+    path: "{{ item }}"
+    state: directory
+  register: _tobiko_create_work_dir
+  with_items:
+    - "{{ tobiko_config.work_dir }}"
+    - "{{ tobiko_config.log_dir }}"
+
+# --- Initialize plugins ------------------------------------------------------
+
+- include_tasks: "{{ tobiko_plugin }}/tobiko-plugin.yml"
+  with_items: "{{ tobiko_config.plugins }}"
+  vars:
+    tobiko_params:
+      method: init
+  loop_control:
+    loop_var: tobiko_plugin

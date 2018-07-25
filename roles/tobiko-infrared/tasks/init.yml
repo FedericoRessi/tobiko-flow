@@ -1,0 +1,30 @@
+
+---
+
+- name: combine config file with default config
+  set_fact:
+    tobiko_infrared_config: >
+      {{ tobiko_infrared_default_config |
+         combine(tobiko_config_from_file["tobiko-infrared"] | default({}),
+                 recursive=True)
+      }}
+  when: item | succeeded
+  with_items: "{{ tobiko_read_config_file.results }}"
+
+- name: get sources
+  git:
+    repo: "{{ tobiko_infrared_config.git_repo }}"
+    dest: "{{ tobiko_infrared_config.src_dir }}"
+    update: false
+  register: tobiko_infrared_get_sources
+
+- name: pupulate virtualenv
+  pip:
+    name:
+      - setuptools
+      - pip
+      - wheel
+      - "{{ tobiko_infrared_config.src_dir }}"
+    state: latest
+    virtualenv: "{{ tobiko_infrared_config.venv_dir }}"
+  when: tobiko_infrared_get_sources | changed

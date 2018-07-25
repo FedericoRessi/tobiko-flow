@@ -1,0 +1,54 @@
+
+---
+
+tobiko:
+
+  setup_cloud:
+    # skip: true
+    # cleanup: false
+
+  setup_test_resources:
+    # skip: true
+
+  run_tests:
+    # skip: true
+    tests:
+      after_setup_test_resources:
+        - neutron-tempest-plugin
+
+      during_upgrade_cloud:
+        - neutron-tempest-plugin
+
+  upgrade_cloud:
+    # skip: true
+
+  cleanup:
+    # skip: true
+
+  plugins:
+    - tobiko-infrared
+
+
+tobiko-infrared:
+
+  # dry_run: true
+
+  setup_cloud:
+    version: 10
+
+  upgrade_cloud:
+    version: 13
+    fast: false
+
+  virsh:
+    host_address: "titan11.lab.eng.tlv2.redhat.com"
+    host_key: ~/.ssh/id_rsa
+    host_memory_overcommit: false
+
+  tripleo_undercloud:
+    mirror: tlv
+
+  tempest:
+    neutron-tempest-plugin:
+      plugins:
+        - "https://git.openstack.org/openstack/neutron-tempest-plugin"

@@ -1,0 +1,42 @@
+
+---
+
+tobiko_config_file: tobiko-config.yml
+
+
+tobiko_default_config:
+
+  work_dir: "{{ ansible_env.HOME }}/.tobiko"
+  log_dir: "{{ ansible_env.HOME }}/.tobiko/log"
+  status_file: tobiko-status.yml
+
+  setup_cloud:
+    skip: false
+    cleanup: true
+    version:
+
+  setup_scenarios:
+    skip: false
+
+  run_tests:
+    skip: false
+    tests:
+      after_setup_cloud: []
+      after_setup_test_resources: []
+      default: []
+      during_upgrade_cloud: []
+      after_upgrade_cloud: []
+
+  upgrade_cloud:
+    skip: false
+    version:
+
+  cleanup:
+    skip: false
+
+  plugins: []
+
+
+tobiko_default_status:
+  cloud:
+    version:

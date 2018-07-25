@@ -1,0 +1,62 @@
+
+---
+
+- name: introspect OpenStack overcloud nodes
+  include_tasks: ../exec.yml
+  vars:
+    tobiko_infrared_exec_params: >
+      tripleo-overcloud
+        --version {{ tobiko_status.cloud.setup_version | quote }}
+        --deployment-files virt
+        --introspect yes
+        --vbmc-force False
+        --tagging no
+        --deploy no
+        --post no
+
+- name: tag OpenStack overcloud nodes
+  include_tasks: ../exec.yml
+  vars:
+    tobiko_infrared_exec_params: >
+      tripleo-overcloud
+        --version {{ tobiko_status.cloud.setup_version| quote }}
+        --deployment-files virt
+        --introspect no
+        --tagging yes
+        --deploy no
+        --post no
+
+- name: deploy OpenStack overcloud nodes
+  include_tasks: ../exec.yml
+  vars:
+    tobiko_infrared_exec_params: >
+      tripleo-overcloud
+        --version {{ tobiko_status.cloud.setup_version| quote }}
+        --deployment-files virt
+        --overcloud-templates none
+        --storage-backend lvm
+        --overcloud-ssl no
+        --network-backend vlan
+        --network-protocol ipv4
+        --network-bgpvpn no
+        --network-dvr no
+        --network-l2gw no
+        --storage-external no
+        --overcloud-debug yes
+        --introspect no
+        --tagging no
+        --deploy yes
+        --post no
+
+- name: configure OpenStack overcloud nodes after deploy
+  include_tasks: ../exec.yml
+  vars:
+    tobiko_infrared_exec_params: >
+      tripleo-overcloud
+        --version {{ tobiko_status.cloud.setup_version| quote }}
+        --deployment-files virt
+        --public-subnet default_subnet
+        --introspect no
+        --tagging no
+        --deploy no
+        --post yes

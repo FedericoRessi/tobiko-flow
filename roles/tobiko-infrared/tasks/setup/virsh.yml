@@ -1,0 +1,13 @@
+
+---
+
+- name: setup OpeStack hypervisor host
+  include_tasks: ../exec.yml
+  vars:
+    tobiko_infrared_exec_params: >
+      virsh
+        --host-address {{ virsh_config.host_address | quote }}
+        --host-key {{ virsh_config.host_key | quote }}
+        --topology-nodes {{ virsh_config.topology_nodes | join(',') | quote }}
+        --host-memory-overcommit {{ virsh_config.host_memory_overcommit |
+                                    quote }}

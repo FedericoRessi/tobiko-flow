@@ -1,0 +1,81 @@
+
+---
+
+- name: run {{ test_config_name }} tests agains OpenStack {{ tobiko_status.cloud.version }}
+  include_tasks: ../exec.yml
+  vars:
+    tobiko_infrared_exec_params: >
+      tempest
+        --openstack-installer tripleo
+        --openstack-version {{ (tobiko_status.cloud.version or
+                                tobiko_config.setup_cloud.version) | quote }}
+
+        {% if (test_config.blackre | length) > 0 %}
+          --blackre {{ blackre | join('|') | quote }}
+        {% endif  %}
+
+        {% for option in (test_config.config_options | default([])) %}
+          --config-options {{test_config.config_options | quote }}
+        {% endfor %}
+
+        {% if (test_config.dir | default(false))  %}
+          --dir {{ test_config.dir | quote }}
+        {% endif  %}
+
+        {% if (test_config.image | default(false)) %}
+          --image {{ test_config.image | quote }}
+
+          {% if (test_config.image_packages | length) > 0 %}
+            --images-packages
+              {{ test_config.image_packages | join(',') | quote }}
+          {% endif  %}
+        {% endif  %}
+
+        {% if (test_config.mode | default(false))  %}
+          --mode {{ test_config.mode | quote }}
+        {% endif  %}
+
+        {% if (test_config.packages | length) > 0 %}
+          --packages {{ test_config.packages | join(',') | quote }}
+        {% endif  %}
+
+        {% if (test_config.pip_packages | length) > 0 %}
+          --pip_packages {{ test_config.pip_packages | join(',') | quote }}
+        {% endif  %}
+
+        {% for plugin in (test_config.plugins | default([])) %}
+          --plugin {{ plugin | quote }}
+        {% endfor  %}
+
+        {% if (test_config.post_config_commands | length) > 0 %}
+          --post-config-commands
+            {{ test_config.post_config_commands | map('quote') | join(',') }}
+        {% endif %}
+
+        {% if (test_config.regexlist_file | default(false)) %}
+          --regexlist-file {{ test_config.regexlist_file | quote }}
+        {% endif %}
+
+        {% for remove_option in (test_config.remove_options | default([])) %}
+          --remove-option {{ remove_option | quote }}
+        {% endfor  %}
+
+        {% if (test_config.revision | default(false)) %}
+        --revision {{ test_config.revision | quote }}
+        {% endif %}
+
+        {% if (test_config.results_formats | length) > 0 %}
+          --results-formats {{ test_config.results_formats | join(',') | quote }}
+        {% endif  %}
+
+        {% if (test_config.setup | default(false)) %}
+          --setup {{ test_config.setup | quote }}
+        {% endif %}
+
+        {% if (test_config.tests | length) > 0 %}
+          --tests {{ test_config.tests | join(',') | quote }}
+        {% endif  %}
+
+        {% if (test_config.threads | default(false)) %}
+          --threads {{ test_config.threads | quote }}
+        {% endif  %}

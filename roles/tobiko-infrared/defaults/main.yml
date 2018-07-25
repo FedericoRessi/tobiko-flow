@@ -1,0 +1,50 @@
+
+---
+
+tobiko_infrared_default_config:
+
+  dry_run: false
+
+  git_repo: "https://github.com/redhat-openstack/infrared.git"
+  src_dir: "{{ tobiko_config.work_dir }}/infrared/src/infrared"
+  venv_dir: "{{ tobiko_config.work_dir }}/infrared"
+  log_file: "{{ tobiko_config.log_dir }}/infrared.log"
+
+  setup_overcloud:
+    version:
+
+  upgrade_overcloud:
+    version:
+
+  virsh:
+    host_address:
+    host_key:
+    host_memory_overcommit:
+    topology_nodes:
+      - "undercloud:1"
+      - "controller:1"
+      - "compute:2"
+      - "tester:1"
+
+  tripleo_undercloud:
+    mirror:
+
+  tempest:
+    default:
+      blackre: []
+      config_options: {}
+      dir:
+      image:
+      image_packages: []
+      mode: normal
+      plugins: []
+      packages: []
+      pip_packages: []
+      post_config_commands: []
+      regexlist_file:
+      remove_options: []
+      results_formats: ['junitxml', 'html']
+      revision:
+      setup:
+      tests: ['all']
+      threads:
