@@ -1,20 +1,10 @@
 ---
 
-- vars:
-    # setup cloud version
-    tobiko_setup_cloud_version:
+- name: step 1 - setup cloud
+  import_playbook: setup_cloud.yml
 
-  hosts: localhost
+- name: step 2 - populate test resources
+  import_playbook: setup_test_resources.yml
 
-  tasks:
-
-    - name: step 1 - setup cloud
-      include_tasks: setup_cloud.yml
-
-    - name: step 2 - populate test resources
-      include_tasks: setup_test_resources.yml
-
-  post_tasks:
-
-    - name: step 5 - final cleanup
-      include_tasks: cleanup.yml
+- name: step 5 - final cleanup
+  import_playbook: cleanup.yml

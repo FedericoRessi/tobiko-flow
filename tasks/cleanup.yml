@@ -1,8 +1,0 @@
-
----
-
-- import_role:
-    name: tobiko
-  vars:
-    tobiko_params:
-      method: cleanup
