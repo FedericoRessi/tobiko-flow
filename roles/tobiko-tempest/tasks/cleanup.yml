@@ -1,5 +1,0 @@
-
----
-
-- name: clean Tempest scenarios
-  set_fact:

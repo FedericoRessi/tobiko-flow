@@ -1,0 +1,10 @@
+---
+
+- name: step 1 - setup cloud
+  import_playbook: setup_cloud.yml
+
+- name: step 2 - populate test resources
+  import_playbook: setup_test_resources.yml
+
+- name: step 5 - final cleanup
+  import_playbook: cleanup.yml

@@ -1,0 +1,16 @@
+
+---
+
+- hosts: localhost
+
+  vars:
+    tobiko_setup_cloud_version:
+
+  tasks:
+
+    - import_role:
+        name: tobiko
+      vars:
+        tobiko_params:
+          method: setup_cloud
+          version: "{{ tobiko_setup_cloud_version }}"

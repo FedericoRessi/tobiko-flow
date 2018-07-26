@@ -1,0 +1,19 @@
+
+---
+
+- hosts: localhost
+
+  vars:
+    tobiko_upgrade_cloud_version:
+    tobiko_upgrade_cloud_fast:
+
+  tasks:
+
+    - include_role:
+        name:
+          tobiko
+      vars:
+        tobiko_params:
+          method: upgrade_cloud
+          version: "{{ tobiko_upgrade_cloud_version }}"
+          fast: "{{ tobiko_upgrade_cloud_fast }}"

@@ -12,7 +12,7 @@
     - tobiko_status.cloud.version != tobiko_params.version
 
 - name: "delegate {{ tobiko_params.method }} to plugins: {{ tobiko_params }}"
-  include_tasks: "{{ tobiko_run_tests_plugin }}/tobiko-plugin.yml"
+  include_tasks: "{{ tobiko_run_tests_plugin }}.yml"
   vars:
     tobiko_tests: >
       {{ tobiko_config.run_tests.tests[tobiko_params.tests | mandatory] or

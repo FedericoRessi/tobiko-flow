@@ -13,6 +13,10 @@ tobiko:
   run_tests:
     # skip: true
     tests:
+
+      default:
+        - neutron-tempest-plugin
+
       after_setup_test_resources:
         - neutron-tempest-plugin
 
@@ -31,14 +35,14 @@ tobiko:
 
 tobiko-infrared:
 
-  # dry_run: true
+  dry_run: true
 
   setup_cloud:
     version: 10
 
   upgrade_cloud:
     version: 13
-    fast: false
+    # fast: true
 
   virsh:
     host_address: "titan11.lab.eng.tlv2.redhat.com"

@@ -13,7 +13,11 @@
            recursive=True) }}
 
 - debug:
-    msg: "{{ tobiko_status }}"
+    msg: >
+      tobiko_status is {{ tobiko_status }},
+      tobiko_params is {{ tobiko_params }},
+      tobiko_infrared_config.upgrade_cloud is {{ tobiko_infrared_config.upgrade_cloud }},
+      fast is {{ tobiko_params.fast or tobiko_infrared_config.upgrade_cloud.fast }}
 
 - name: incremental upgrade from version 7 to 8
   include_tasks: upgrade/incremental.yml
@@ -46,7 +50,7 @@
     final_version: 13
   when:
     - (tobiko_status.cloud.version | int) == 10
-    - tobiko_params.fast | default(false)
+    - tobiko_params.fast or tobiko_infrared_config.upgrade_cloud.fast
 
 - name: incremental upgrade from version 10 to 11
   include_tasks: upgrade/incremental.yml

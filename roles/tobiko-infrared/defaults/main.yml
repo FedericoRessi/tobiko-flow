@@ -10,11 +10,12 @@ tobiko_infrared_default_config:
   venv_dir: "{{ tobiko_config.work_dir }}/infrared"
   log_file: "{{ tobiko_config.log_dir }}/infrared.log"
 
-  setup_overcloud:
-    version:
+  setup_cloud:
+    varsion:
 
-  upgrade_overcloud:
+  upgrade_cloud:
     version:
+    fast:
 
   virsh:
     host_address:
