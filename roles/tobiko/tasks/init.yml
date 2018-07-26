@@ -66,13 +66,3 @@
   with_items:
     - "{{ tobiko_config.work_dir }}"
     - "{{ tobiko_config.log_dir }}"
-
-# --- Initialize plugins ------------------------------------------------------
-
-- include_tasks: "{{ tobiko_plugin }}.yml"
-  with_items: "{{ tobiko_config.plugins }}"
-  vars:
-    tobiko_params:
-      method: init
-  loop_control:
-    loop_var: tobiko_plugin

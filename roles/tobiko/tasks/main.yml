@@ -3,9 +3,9 @@
 
 - name: init
   include_tasks: init.yml
-  when: tobiko_status is not defined
+  when: tobiko_config is not defined
 
-- name: execute {{ tobiko_params }}
+- name: "tobiko_params.method (params: {{ tobiko_params }})"
   include_tasks: "{{ tobiko_params.method }}.yml"
   when:
     - tobiko_params.method | default(false)

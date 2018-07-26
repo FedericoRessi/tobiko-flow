@@ -1,6 +1,10 @@
 
 ---
 
+- name: init
+  include_tasks: init.yml
+  when: tobiko_infrared_config is not defined
+
 - name: "{{ tobiko_params.method }}"
   include_tasks: "{{ tobiko_params.method }}.yml"
   when:

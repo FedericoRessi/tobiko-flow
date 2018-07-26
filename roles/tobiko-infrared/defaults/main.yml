@@ -11,11 +11,22 @@ tobiko_infrared_default_config:
   log_file: "{{ tobiko_config.log_dir }}/infrared.log"
 
   setup_cloud:
+    skip:
     varsion:
 
+  setup_test_resources:
+    skip:
+
+  run_tests:
+    skip:
+
   upgrade_cloud:
+    skip:
     version:
     fast:
+
+  cleanup:
+    skip:
 
   virsh:
     host_address:
