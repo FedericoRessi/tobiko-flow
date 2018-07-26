@@ -27,4 +27,4 @@
       - "{{ tobiko_infrared_config.src_dir }}"
     state: latest
     virtualenv: "{{ tobiko_infrared_config.venv_dir }}"
-  when: tobiko_infrared_get_sources | changed
+  when: tobiko_infrared_get_sources is changed
