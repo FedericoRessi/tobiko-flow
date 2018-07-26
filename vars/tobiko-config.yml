@@ -45,7 +45,7 @@ tobiko-infrared:
     # fast: true
 
   virsh:
-    host_address: "titan11.lab.eng.tlv2.redhat.com"
+    host_address: localhost
     host_key: ~/.ssh/id_rsa
     host_memory_overcommit: false
 
