@@ -21,7 +21,7 @@
          combine(tobiko_config_from_file.tobiko | default({}),
                  recursive=True)
       }}
-  when: item | succeeded
+  when: item is succeeded
   with_items: "{{ tobiko_read_config_file.results }}"
 
 - debug:
@@ -49,7 +49,7 @@
     tobiko_status: >
       {{ tobiko_status |
          combine((item['content'] | b64decode | from_yaml), recursive=True) }}
-  when: item | succeeded
+  when: item is succeeded
   with_items: "{{ _tobiko_read_status_file.results }}"
 
 - debug:

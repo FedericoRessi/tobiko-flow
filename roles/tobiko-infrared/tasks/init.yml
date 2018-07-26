@@ -8,7 +8,7 @@
          combine(tobiko_config_from_file["tobiko-infrared"] | default({}),
                  recursive=True)
       }}
-  when: item | succeeded
+  when: item is succeeded
   with_items: "{{ tobiko_read_config_file.results }}"
 
 - name: get sources
