@@ -1,7 +1,7 @@
 
 ---
 
-- name: run {{ test_config_name }} tests agains OpenStack {{ tobiko_status.cloud.version }}
+- name: run {{ test_config_name }} tests against OpenStack {{ tobiko_status.cloud.version }}
   include_tasks: ../exec.yml
   vars:
     tobiko_infrared_exec_params: >

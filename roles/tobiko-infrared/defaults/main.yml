@@ -36,7 +36,6 @@ tobiko_infrared_default_config:
       - "undercloud:1"
       - "controller:1"
       - "compute:2"
-      - "tester:1"
 
   tripleo_undercloud:
     mirror:
