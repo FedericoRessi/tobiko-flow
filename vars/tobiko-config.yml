@@ -35,7 +35,7 @@ tobiko:
 
 tobiko-infrared:
 
-  dry_run: true
+  # dry_run: true
 
   setup_cloud:
     version: 10
