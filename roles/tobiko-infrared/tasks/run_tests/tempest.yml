@@ -40,7 +40,7 @@
         {% endif  %}
 
         {% if (test_config.pip_packages | length) > 0 %}
-          --pip_packages {{ test_config.pip_packages | join(',') | quote }}
+          --pip-packages {{ test_config.pip_packages | join(',') | quote }}
         {% endif  %}
 
         {% for plugin in (test_config.plugins | default([])) %}

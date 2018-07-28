@@ -49,8 +49,11 @@ tobiko_infrared_default_config:
       image_packages: []
       mode: normal
       plugins: []
-      packages: []
-      pip_packages: []
+      packages:
+        - gcc
+        - python-devel
+      pip_packages:
+        - setuptools==40.0.0
       post_config_commands: []
       regexlist_file:
       remove_options: []
