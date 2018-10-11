@@ -2,7 +2,7 @@
 ---
 
 - name: introspect OpenStack overcloud nodes
-  include_tasks: ../exec.yml
+  include_tasks: ../exec/infrared.yml
   vars:
     tobiko_infrared_exec_params: >
       tripleo-overcloud
@@ -15,7 +15,7 @@
         --post no
 
 - name: tag OpenStack overcloud nodes
-  include_tasks: ../exec.yml
+  include_tasks: ../exec/infrared.yml
   vars:
     tobiko_infrared_exec_params: >
       tripleo-overcloud
@@ -27,7 +27,7 @@
         --post no
 
 - name: deploy OpenStack overcloud nodes
-  include_tasks: ../exec.yml
+  include_tasks: ../exec/infrared.yml
   vars:
     tobiko_infrared_exec_params: >
       tripleo-overcloud
@@ -49,7 +49,7 @@
         --storage-external no
 
 - name: configure OpenStack overcloud nodes after deploy
-  include_tasks: ../exec.yml
+  include_tasks: ../exec/infrared.yml
   vars:
     tobiko_infrared_exec_params: >
       tripleo-overcloud

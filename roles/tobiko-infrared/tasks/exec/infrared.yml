@@ -12,8 +12,12 @@
       set -ex
       infrared "${params[@]}" > "${out_file}" 2> "${err_file}"
     ) >> "${log_file}" 2>&1
+    result=$?
     dos2unix "${out_file}" "${err_file}"
     cat "${out_file}" "${err_file}" >> "${log_file}"
+    cat "${err_file}" 1>&2
+    cat "${out_file}"
+    exit ${result}
 
   args:
     chdir: "{{ tobiko_infrared_config.src_dir }}"

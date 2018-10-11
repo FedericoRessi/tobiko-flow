@@ -11,7 +11,7 @@ tobiko_infrared_default_config:
   log_file: "{{ tobiko_config.log_dir }}/infrared.log"
   out_file: "{{ tobiko_config.var_dir }}/infrared-stdout.txt"
   err_file: "{{ tobiko_config.var_dir }}/infrared-stderr.txt"
-  overcloudrc_file: "{{ tobiko_config.work_dir }}/infrared/overcloudrc"
+
   mirror:
 
   setup_cloud:
@@ -19,6 +19,12 @@ tobiko_infrared_default_config:
 
   setup_test_resources:
     skip:
+    stackrc_file: "{{ tobiko_config.work_dir }}/infrared/overcloudrc"
+    stackenv_file: "{{ tobiko_config.work_dir }}/infrared/overcloud-env.yml"
+    cirros_image_url: "http://download.cirros-cloud.net/0.4.0/cirros-0.4.0-x86_64-disk.img"
+    cirros_image_file: "{{ tobiko_config.work_dir }}/infrared/cirros-0.4.0-x86_64-disk.img"
+    cirros_image: cirros-0.4.0
+    flavor: small
 
   run_tests:
     skip:

@@ -1,14 +1,46 @@
 
 ---
 
-- name: get overcloudrc file
-  include_tasks: exec.yml
+- name: download Cirros cloud image
+  get_url:
+    url: "{{ tobiko_infrared_config.setup_test_resources.cirros_image_url }}"
+    dest: "{{ tobiko_infrared_config.setup_test_resources.cirros_image_file }}"
+  register: download_cirros_cloud_image
+
+
+- name: list images
+  include_tasks: exec/openstack.yml
   vars:
     tobiko_infrared_exec_params: >
-      ssh undercloud-0 'cat overcloudrc'
+      image list --public
 
 
-- name: write overcloudrc file
-  copy:
-    src: "{{ tobiko_infrared_config.out_file }}"
-    dest: "{{ tobiko_infrared_config.overcloudrc_file }}"
+- name: install cloud image
+  include_tasks: exec/openstack.yml
+  vars:
+    tobiko_infrared_exec_params: >
+      image create "{{ tobiko_infrared_config.setup_test_resources.cirros_image }}"
+        --public
+        --disk-format qcow2
+        --container-format bare
+        --file "{{ tobiko_infrared_config.setup_test_resources.cirros_image_file }}"
+  when: >
+    tobiko_infrared_config.setup_test_resources.cirros_image not in
+      (tobiko_openstack_output | json_query('[*].Name'))
+
+
+- name: list flavors
+  include_tasks: exec/openstack.yml
+  vars:
+    tobiko_infrared_exec_params: >
+      flavor list --public
+
+
+- name: create flavor
+  include_tasks: exec/openstack.yml
+  vars:
+    tobiko_infrared_exec_params: >
+      flavor create --ram 256 --public "{{ tobiko_infrared_config.setup_test_resources.flavor }}"
+  when: >
+    tobiko_infrared_config.setup_test_resources.flavor not in
+      (tobiko_openstack_output | json_query('[*].Name'))

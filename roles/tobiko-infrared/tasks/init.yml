@@ -32,6 +32,8 @@
       - setuptools
       - pip
       - wheel
+      - python-openstackclient
+      - python-heatclient
       - "{{ tobiko_infrared_config.src_dir }}"
     state: latest
     virtualenv: "{{ tobiko_infrared_config.venv_dir }}"
@@ -39,7 +41,7 @@
 
 
 - name: install all InfraRed plugins
-  include_tasks: ../exec.yml
+  include_tasks: ../exec/infrared.yml
   vars:
     tobiko_infrared_exec_params: >
       plugin add all
@@ -58,3 +60,16 @@
       {% if (tobiko_infrared_config.mirror | default(false)) %}
          --mirror {{ tobiko_infrared_config.mirror | quote }}
       {% endif %}
+
+
+- name: get overcloudrc file
+  include_tasks: exec/infrared.yml
+  vars:
+    tobiko_infrared_exec_params: >
+      ssh undercloud-0 'cat overcloudrc'
+
+
+- name: write overcloudrc file
+  copy:
+    src: "{{ tobiko_infrared_config.out_file }}"
+    dest: "{{ tobiko_infrared_config.setup_test_resources.stackrc_file }}"

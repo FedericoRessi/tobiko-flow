@@ -2,7 +2,7 @@
 ---
 
 - name: set up undercloud upgrade repositories
-  include_tasks: ../exec.yml
+  include_tasks: ../exec/infrared.yml
   vars:
     tobiko_infrared_exec_params: >
       tripleo-undercloud
@@ -13,7 +13,7 @@
 
 
 - name: set up undercloud update repositories:
-  include_tasks: ../exec.yml
+  include_tasks: ../exec/infrared.yml
   vars:
     tobiko_infrared_exec_params: >
       tripleo-undercloud
@@ -26,7 +26,7 @@
 
 
 - name: upgrade undercloud
-  include_tasks: ../exec.yml
+  include_tasks: ../exec/infrared.yml
   vars:
     tobiko_infrared_exec_params: >
       tripleo-upgrade
@@ -34,7 +34,7 @@
 
 
 - name: update undercloud
-  include_tasks: ../exec.yml
+  include_tasks: ../exec/infrared.yml
   vars:
     tobiko_infrared_exec_params: >
       tripleo-upgrade
@@ -42,7 +42,7 @@
 
 
 - name: set up overcloud upgrade repositories
-  include_tasks: ../exec.yml
+  include_tasks: ../exec/infrared.yml
   vars:
     tobiko_infrared_exec_params: >
       tripleo-overcloud
@@ -54,7 +54,7 @@
 
 
 - name: set up overcloud update repositories/containers
-  include_tasks: ../exec.yml
+  include_tasks: ../exec/infrared.yml
   vars:
     tobiko_infrared_exec_params: >
       tripleo-overcloud
@@ -65,7 +65,7 @@
 
 
 - name: upgrade overcloud
-  include_tasks: ../exec.yml
+  include_tasks: ../exec/infrared.yml
   vars:
     tobiko_infrared_exec_params: >
       tripleo-upgrade
@@ -73,7 +73,7 @@
 
 
 - name: udate overcloud
-  include_tasks: ../exec.yml
+  include_tasks: ../exec/infrared.yml
   vars:
     tobiko_infrared_exec_params: >
       tripleo-upgrade

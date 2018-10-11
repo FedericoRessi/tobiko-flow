@@ -2,7 +2,7 @@
 ---
 
 - name: run {{ test_config_name }} tests against OpenStack {{ tobiko_status.cloud.version }}
-  include_tasks: ../exec.yml
+  include_tasks: ../exec/infrared.yml
   vars:
     tobiko_infrared_exec_params: >
       tempest
