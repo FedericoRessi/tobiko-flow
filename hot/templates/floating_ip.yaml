@@ -1,0 +1,113 @@
+heat_template_version: 2013-05-23
+
+
+description: |
+  Template to create an instance and check connectivity to it
+
+
+parameters:
+
+  public_key:
+    type: string
+
+  flavor:
+    type: string
+
+  image:
+    type: string
+
+  subnet_cidr:
+    type: string
+    default: 190.40.2.0/24
+
+  public_network:
+    type: string
+    default: public
+
+  dns_servers:
+    type: comma_delimited_list
+    default: ["8.8.8.8", "8.8.4.4"]
+
+  ip_version:
+    type: string
+    default: 4
+
+
+resources:
+
+  name:
+    type: OS::Tobiko::RandomName
+    properties:
+      prefix: floating_ip
+
+  network:
+    type: OS::Neutron::Net
+
+  subnet:
+    type: OS::Neutron::Subnet
+    properties:
+      network: { get_resource: network }
+      ip_version: { get_param: ip_version }
+      cidr: { get_param: subnet_cidr }
+      dns_nameservers: { get_param: dns_servers }
+
+  router:
+    type: OS::Neutron::Router
+    properties:
+      external_gateway_info:
+        network: { get_param: public_network }
+
+  router_interface:
+    type: OS::Neutron::RouterInterface
+    properties:
+      router: { get_resource: router }
+      subnet: { get_resource: subnet }
+
+  floating_ip:
+    type: OS::Neutron::FloatingIP
+    properties:
+      floating_network: { get_param: public_network }
+
+  security_group:
+    type: OS::Neutron::SecurityGroup
+    properties:
+      name: ssh_and_icmp
+      description: Security group to allow ICMP and SSH
+      rules:
+        - protocol: icmp
+        - protocol: tcp
+          port_range_min: 22
+          port_range_max: 22
+
+  port:
+    type: OS::Neutron::Subnet
+    properties:
+      network: { get_resource: network }
+      security_groups:
+      - { get_resource: security_group }
+
+  key_pair:
+    type: OS::Nova::KeyPair
+    properties:
+      # name: { get_attr: [name, name] }
+      public_key:  { get_param: public_key }
+
+  server:
+    type: OS::Nova::Server
+    properties:
+      image: { get_param: image }
+      flavor: { get_param: flavor }
+      networks:
+        - port: { get_resource: port }
+      key_name: { get_attr: [key_pair, name] }
+
+  floating_ip_association:
+    type: OS::Neutron::FloatingIPAssociation
+    properties:
+      floatingip_id: { get_resource: floating_ip }
+      port_id: { get_resource: port }
+
+
+outputs:
+  floating_ip:
+    value: {get_attr: [floating_ip, floating_ip_address]}

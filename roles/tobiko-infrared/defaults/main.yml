@@ -9,6 +9,8 @@ tobiko_infrared_default_config:
   src_dir: "{{ tobiko_config.work_dir }}/infrared/src/infrared"
   venv_dir: "{{ tobiko_config.work_dir }}/infrared"
   log_file: "{{ tobiko_config.log_dir }}/infrared.log"
+  out_file: "{{ tobiko_config.var_dir }}/infrared-stdout.txt
+  err_file: "{{ tobiko_config.var_dir }}/infrared-stderr.txt
   mirror:
 
   setup_cloud:

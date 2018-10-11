@@ -4,12 +4,16 @@
 - name: infrared {{ tobiko_infrared_exec_params | mandatory }}
   shell: |
     source "{{ tobiko_infrared_config.venv_dir }}/bin/activate"
-    log_file="{{ tobiko_infrared_default_config.log_file }}"
+    log_file="{{ tobiko_infrared_config.log_file }}"
+    err_file="{{ tobiko_infrared_config.err_file }}"
+    out_file="{{ tobiko_infrared_config.out_file }}"
     params=( {{ tobiko_infrared_exec_params }} )
     (
       set -ex
-      infrared "${params[@]}"
+      infrared "${params[@]}" > "${out_file}" 2> "${err_file}"
     ) >> "${log_file}" 2>&1
+    cat "${out_file}" "${err_file}" >> "${log_file}"
+
   args:
     chdir: "{{ tobiko_infrared_config.src_dir }}"
   register: tobiko_infrared_exec

@@ -65,4 +65,5 @@
   register: _tobiko_create_work_dir
   with_items:
     - "{{ tobiko_config.work_dir }}"
+    - "{{ tobiko_config.var_dir }}"
     - "{{ tobiko_config.log_dir }}"

@@ -1,2 +1,8 @@
 
 ---
+
+- name: Get overcloudrc file
+  include_tasks: exec.yml
+  vars:
+    tobiko_infrared_exec_params: >
+      ssh undercloud-0 'cat overcloudrc'

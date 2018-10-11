@@ -8,6 +8,7 @@ tobiko_default_config:
 
   work_dir: "{{ ansible_env.HOME }}/.tobiko"
   log_dir: "{{ ansible_env.HOME }}/.tobiko/log"
+  var_dir: "{{ ansible_env.HOME }}/.tobiko/var"
   status_file: tobiko-status.yml
 
   setup_cloud:
