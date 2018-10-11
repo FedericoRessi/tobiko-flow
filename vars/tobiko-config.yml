@@ -53,7 +53,7 @@ tobiko-infrared:
     mirror: tlv
 
   tripleo_overcloud:
-    network_dvr: no
+    # network_dvr: yes
     overcloud_templates: none
 
   tempest:

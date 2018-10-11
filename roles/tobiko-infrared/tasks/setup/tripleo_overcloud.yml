@@ -33,21 +33,20 @@
       tripleo-overcloud
         --version {{ tobiko_status.cloud.setup_version | quote }}
         --deployment-files virt
-        --overcloud-templates none
-        --storage-backend lvm
-        --overcloud-ssl no
-        --overcloud-templates {{ tripleo_overcloud_config.overcloud_templates | quote}}
-        --network-backend vlan
-        --network-protocol ipv4
-        --network-bgpvpn no
-        --network-dvr {{ tripleo_overcloud_config.network_dvr | quote }}
-        --network-l2gw no
-        --storage-external no
-        --overcloud-debug yes
         --introspect no
         --tagging no
         --deploy yes
         --post no
+        --overcloud-debug yes
+        --overcloud-ssl no
+        --overcloud-templates {{ tripleo_overcloud_config.overcloud_templates | quote}}
+        --network-backend vlan
+        --network-bgpvpn no
+        --network-dvr {{ tripleo_overcloud_config.network_dvr | quote }}
+        --network-l2gw no
+        --network-protocol ipv4
+        --storage-backend lvm
+        --storage-external no
 
 - name: configure OpenStack overcloud nodes after deploy
   include_tasks: ../exec.yml
@@ -56,8 +55,8 @@
       tripleo-overcloud
         --version {{ tobiko_status.cloud.setup_version | quote }}
         --deployment-files virt
-        --public-subnet default_subnet
         --introspect no
         --tagging no
         --deploy no
         --post yes
+        --public-subnet default_subnet

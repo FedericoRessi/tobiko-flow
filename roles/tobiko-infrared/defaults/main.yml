@@ -23,7 +23,7 @@ tobiko_infrared_default_config:
   upgrade_cloud:
     skip:
     version:
-    fast:
+    fast: false
 
   cleanup:
     skip:
