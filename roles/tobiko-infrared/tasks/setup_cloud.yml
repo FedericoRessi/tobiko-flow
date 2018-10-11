@@ -22,6 +22,9 @@
       {{ tobiko_infrared_config.tripleo_undercloud }}
 
 - include_tasks: "setup/tripleo_overcloud.yml"
+  vars:
+    tripleo_overcloud_config: >
+      {{ tobiko_infrared_config.tripleo_overcloud }}
 
 - name: setup {{ tobiko_params.version }} complete
   set_fact:

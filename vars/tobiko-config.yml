@@ -52,6 +52,10 @@ tobiko-infrared:
   tripleo_undercloud:
     mirror: tlv
 
+  tripleo_overcloud:
+    network_dvr: no
+    overcloud_templates: none
+
   tempest:
     neutron-tempest-plugin:
       plugins:

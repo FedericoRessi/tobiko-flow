@@ -19,7 +19,7 @@
   vars:
     tobiko_infrared_exec_params: >
       tripleo-overcloud
-        --version {{ tobiko_status.cloud.setup_version| quote }}
+        --version {{ tobiko_status.cloud.setup_version | quote }}
         --deployment-files virt
         --introspect no
         --tagging yes
@@ -31,15 +31,16 @@
   vars:
     tobiko_infrared_exec_params: >
       tripleo-overcloud
-        --version {{ tobiko_status.cloud.setup_version| quote }}
+        --version {{ tobiko_status.cloud.setup_version | quote }}
         --deployment-files virt
         --overcloud-templates none
         --storage-backend lvm
         --overcloud-ssl no
+        --overcloud-templates {{ tripleo_overcloud_config.overcloud_templates | quote}}
         --network-backend vlan
         --network-protocol ipv4
         --network-bgpvpn no
-        --network-dvr no
+        --network-dvr {{ tripleo_overcloud_config.network_dvr | quote }}
         --network-l2gw no
         --storage-external no
         --overcloud-debug yes
@@ -53,7 +54,7 @@
   vars:
     tobiko_infrared_exec_params: >
       tripleo-overcloud
-        --version {{ tobiko_status.cloud.setup_version| quote }}
+        --version {{ tobiko_status.cloud.setup_version | quote }}
         --deployment-files virt
         --public-subnet default_subnet
         --introspect no

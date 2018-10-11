@@ -40,6 +40,10 @@ tobiko_infrared_default_config:
   tripleo_undercloud:
     mirror:
 
+  tripleo_overcloud:
+    network_dvr: no
+    overcloud_templates: none
+
   tempest:
     default:
       blackre: []
