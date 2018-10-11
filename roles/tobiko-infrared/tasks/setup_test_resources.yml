@@ -1,8 +1,14 @@
 
 ---
 
-- name: Get overcloudrc file
+- name: get overcloudrc file
   include_tasks: exec.yml
   vars:
     tobiko_infrared_exec_params: >
       ssh undercloud-0 'cat overcloudrc'
+
+
+- name: write overcloudrc file
+  copy:
+    src: "{{ tobiko_infrared_config.out_file }}"
+    dest: "{{ tobiko_infrared_config.overcloudrc_file }}"

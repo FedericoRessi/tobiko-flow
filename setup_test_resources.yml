@@ -13,4 +13,4 @@
         tobiko_params:
           method: setup_test_resources
           hot_templates:
-            - hot/templates/vif.yml
+            - hot/templates/floating_ip.yaml

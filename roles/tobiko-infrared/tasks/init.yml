@@ -1,6 +1,12 @@
 
 ---
 
+- name: install dos2unix
+  yum:
+    name: dos2unix
+    state: present
+
+
 - name: combine config file with default config
   set_fact:
     tobiko_infrared_config: >
