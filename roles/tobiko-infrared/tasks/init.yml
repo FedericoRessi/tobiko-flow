@@ -11,12 +11,14 @@
   when: item is succeeded
   with_items: "{{ tobiko_read_config_file.results }}"
 
+
 - name: get sources
   git:
     repo: "{{ tobiko_infrared_config.git_repo }}"
     dest: "{{ tobiko_infrared_config.src_dir }}"
     update: false
   register: tobiko_infrared_get_sources
+
 
 - name: pupulate virtualenv
   pip:
@@ -28,3 +30,25 @@
     state: latest
     virtualenv: "{{ tobiko_infrared_config.venv_dir }}"
   when: tobiko_infrared_get_sources is changed
+
+
+- name: install all InfraRed plugins
+  include_tasks: ../exec.yml
+  vars:
+    tobiko_infrared_exec_params: >
+      plugin add all
+
+
+- name: simlink plugin roles into InfraRed tripleo-upgrade plugin
+  file:
+    src: "{{ tobiko_infrared_config.src_dir }}/plugins"
+    dest: "{{ tobiko_infrared_config.src_dir }}/plugins/tripleo-upgrade/infrared_plugin/roles"
+    state: link
+
+
+- name: set mirror infrared option
+  set_fact:
+    tobiko_infrared_mirror: >
+      {% if (tobiko_infrared_config.mirror | default(false)) %}
+         --mirror {{ tobiko_infrared_config.mirror | quote }}
+      {% endif %}

@@ -16,6 +16,4 @@
         --images-task rpm
         --images-update yes
 
-        {% if (tripleo_undercloud_config.mirror | default(false)) %}
-          --mirror {{ tripleo_undercloud_config.mirror | quote }}
-        {% endif %}
+        {{ tobiko_infrared_mirror }}

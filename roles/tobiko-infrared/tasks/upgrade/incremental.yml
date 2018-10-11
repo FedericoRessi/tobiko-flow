@@ -1,12 +1,92 @@
 
 ---
 
+- name: set up undercloud upgrade repositories
+  include_tasks: ../exec.yml
+  vars:
+    tobiko_infrared_exec_params: >
+      tripleo-undercloud
+        --upgrade yes
+        --ansible-args="tags=upgrade_repos"
+
+        {{ tobiko_infrared_mirror }}
+
+
+- name: set up undercloud update repositories:
+  include_tasks: ../exec.yml
+  vars:
+    tobiko_infrared_exec_params: >
+      tripleo-undercloud
+        --update-undercloud yes
+        --build latest
+        --version {{ initial_version | quote }}
+        --ansible-args="tags=upgrade_repos"
+
+        {{ tobiko_infrared_mirror }}
+
+
+- name: upgrade undercloud
+  include_tasks: ../exec.yml
+  vars:
+    tobiko_infrared_exec_params: >
+      tripleo-upgrade
+        --undercloud-upgrade yes
+
+
+- name: update undercloud
+  include_tasks: ../exec.yml
+  vars:
+    tobiko_infrared_exec_params: >
+      tripleo-upgrade
+        --undercloud-update yes
+
+
+- name: set up overcloud upgrade repositories
+  include_tasks: ../exec.yml
+  vars:
+    tobiko_infrared_exec_params: >
+      tripleo-overcloud
+        --deployment-files virt
+        --upgrade yes
+        --ansible-args="tags=upgrade_collect_info,upgrade_repos"
+
+        {{ tobiko_infrared_mirror }}
+
+
+- name: set up overcloud update repositories/containers
+  include_tasks: ../exec.yml
+  vars:
+    tobiko_infrared_exec_params: >
+      tripleo-overcloud
+        --deployment-files virt
+        --ocupdate True
+        --build latest
+        --ansible-args="tags=update_collect_info,update_undercloud_validation,update_repos,update_prepare_containers"
+
+
+- name: upgrade overcloud
+  include_tasks: ../exec.yml
+  vars:
+    tobiko_infrared_exec_params: >
+      tripleo-upgrade
+        --overcloud-upgrade yes
+
+
+- name: udate overcloud
+  include_tasks: ../exec.yml
+  vars:
+    tobiko_infrared_exec_params: >
+      tripleo-upgrade
+        --overcloud-update yes
+
+
 - name: incremental upgrade from {{ initial_version }} to {{ final_version }} complete
   set_fact:
     tobiko_status: >
       {{ tobiko_status |
          combine({'cloud': {'version': final_version }},
                  recursive=True) }}
+
 
 - name: run tests during incremental upgrade
   include_role:

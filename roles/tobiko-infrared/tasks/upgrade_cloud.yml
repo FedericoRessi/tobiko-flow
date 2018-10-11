@@ -12,12 +12,20 @@
                 tobiko_infrared_config.upgrade_cloud.version) | mandatory }},
            recursive=True) }}
 
+
+- name: import configuration for Infrared upgrade
+  set_fact:
+    tripleo_upgrade_config: >
+      {{ tobiko_infrared_config.tripleo_upgrade }}
+
+
 - debug:
     msg: >
       tobiko_status is {{ tobiko_status }},
       tobiko_params is {{ tobiko_params }},
-      tobiko_infrared_config.upgrade_cloud is {{ tobiko_infrared_config.upgrade_cloud }},
-      fast is {{ tobiko_params.fast or tobiko_infrared_config.upgrade_cloud.fast }}
+      tripleo_upgrade_config is {{ tripleo_upgrade_config }},
+      tobiko_infrared_mirror is {{ tobiko_infrared_mirror }}
+
 
 - name: incremental upgrade from version 7 to 8
   include_tasks: upgrade/incremental.yml
@@ -26,6 +34,8 @@
     final_version: 8
   when:
     - (tobiko_status.cloud.version | int) == 7
+    - (tobiko_status.cloud.upgrade_version | int) > 7
+
 
 - name: incremental upgrade from version 8 to 9
   include_tasks: upgrade/incremental.yml
@@ -34,6 +44,8 @@
     final_version: 9
   when:
     - (tobiko_status.cloud.version | int) == 8
+    - (tobiko_status.cloud.upgrade_version | int) > 8
+
 
 - name: incremental upgrade from version 9 to 10
   include_tasks: upgrade/incremental.yml
@@ -42,6 +54,8 @@
     final_version: 10
   when:
     - (tobiko_status.cloud.version | int) == 9
+    - (tobiko_status.cloud.upgrade_version | int) > 9
+
 
 - name: fast upgrade from version 10 to 13
   include_tasks: upgrade/fast.yml
@@ -50,7 +64,9 @@
     final_version: 13
   when:
     - (tobiko_status.cloud.version | int) == 10
-    - tobiko_params.fast or tobiko_infrared_config.upgrade_cloud.fast
+    - (tobiko_status.cloud.upgrade_version | int) > 12
+    - tobiko_params.fast or tripleo_upgrade_config.fast
+
 
 - name: incremental upgrade from version 10 to 11
   include_tasks: upgrade/incremental.yml
@@ -59,6 +75,8 @@
     final_version: 11
   when:
     - (tobiko_status.cloud.version | int) == 10
+    - (tobiko_status.cloud.upgrade_version | int) > 10
+
 
 - name: incremental upgrade from version 11 to 12
   include_tasks: upgrade/incremental.yml
@@ -67,6 +85,8 @@
     final_version: 12
   when:
     - (tobiko_status.cloud.version | int) == 11
+    - (tobiko_status.cloud.upgrade_version | int) > 11
+
 
 - name: incremental upgrade from version 12 to 13
   include_tasks: upgrade/incremental.yml
@@ -75,3 +95,14 @@
     final_version: 13
   when:
     - (tobiko_status.cloud.version | int) == 12
+    - (tobiko_status.cloud.upgrade_version | int) > 12
+
+
+- name: incremental upgrade from version 13 to 14
+  include_tasks: upgrade/incremental.yml
+  vars:
+    initial_version: 13
+    final_version: 14
+  when:
+    - (tobiko_status.cloud.version | int) == 13
+    - (tobiko_status.cloud.upgrade_version | int) > 13
