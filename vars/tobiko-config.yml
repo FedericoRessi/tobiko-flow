@@ -6,7 +6,7 @@ tobiko:
   setup_cloud:
     # skip: true
     # cleanup: false
-    version: 10
+    version: 12
 
   upgrade_cloud:
     version: 13
@@ -50,8 +50,7 @@ tobiko-infrared:
     mirror: tlv
 
   tripleo_overcloud:
-    # network_dvr: yes
-    overcloud_templates: none
+    network_dvr: yes
 
   tripleo_upgrade:
     # fast: true
