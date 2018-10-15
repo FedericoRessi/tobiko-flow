@@ -4,7 +4,7 @@
 - name: run {{ test_config_name }} tests against OpenStack {{ tobiko_status.cloud.version }}
   include_tasks: ../exec/infrared.yml
   vars:
-    tobiko_infrared_exec_params: >
+    infrared_args: >
       tempest
         --openstack-installer tripleo
         --openstack-version {{ (tobiko_status.cloud.version or

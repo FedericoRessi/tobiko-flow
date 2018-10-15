@@ -1,0 +1,30 @@
+
+- name: install dos2unix
+  yum:
+    name: dos2unix
+    state: present
+
+
+- name: get OpenStack RC file
+  include_tasks: infrared/exec.yml
+  vars:
+    infrared_args: ssh undercloud-0 'cat overcloudrc'
+
+
+- name: write OpenStack RC file
+  copy:
+    content: "{{ infrared_exec.stdout }}"
+    dest: "{{ openstack_config.rc_file }}"
+  register: write_openstack_rc_file
+
+
+- name: Fix infrared stdout
+  shell:
+    dos2unix "{{ openstack_config.rc_file | quote }}"
+
+
+- name: append Python virtualenv script to OpenStack RC file
+  lineinfile:
+    path: "{{ openstack_config.rc_file }}"
+    state: present
+    line: 'source "{{ tobiko_infrared_config.venv_dir }}/bin/activate"'

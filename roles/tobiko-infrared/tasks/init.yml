@@ -1,12 +1,6 @@
 
 ---
 
-- name: install dos2unix
-  yum:
-    name: dos2unix
-    state: present
-
-
 - name: combine config file with default config
   set_fact:
     tobiko_infrared_config: >
@@ -41,9 +35,9 @@
 
 
 - name: install all InfraRed plugins
-  include_tasks: ../exec/infrared.yml
+  include_tasks: ../infrared/exec.yml
   vars:
-    tobiko_infrared_exec_params: >
+    infrared_args: >
       plugin add all
 
 
@@ -60,16 +54,3 @@
       {% if (tobiko_infrared_config.mirror | default(false)) %}
          --mirror {{ tobiko_infrared_config.mirror | quote }}
       {% endif %}
-
-
-- name: get overcloudrc file
-  include_tasks: exec/infrared.yml
-  vars:
-    tobiko_infrared_exec_params: >
-      ssh undercloud-0 'cat overcloudrc'
-
-
-- name: write overcloudrc file
-  copy:
-    src: "{{ tobiko_infrared_config.out_file }}"
-    dest: "{{ tobiko_infrared_config.setup_test_resources.stackrc_file }}"

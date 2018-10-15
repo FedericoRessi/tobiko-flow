@@ -1,46 +1,46 @@
 
 ---
 
-- name: download Cirros cloud image
-  get_url:
-    url: "{{ tobiko_infrared_config.setup_test_resources.cirros_image_url }}"
-    dest: "{{ tobiko_infrared_config.setup_test_resources.cirros_image_file }}"
-  register: download_cirros_cloud_image
+- name: import Opensack configuration
+  set_fact:
+    openstack_config: '{{ tobiko_infrared_config.openstack }}'
 
 
-- name: list images
-  include_tasks: exec/openstack.yml
+# --- Setup OpenStack client --------------------------------------------------
+
+- name: Check {{ openstack_config.rc_file }} exists
+  stat:
+    path: "{{ openstack_config.rc_file }}"
+  register: check_openstack_rc_file
+
+- name: Create OpenStack RC file
+  include_tasks: openstack/setup_rc.yml
+  when: not check_openstack_rc_file.stat.exists
+
+
+# --- Setup OpenStack Heat client --------------------------------------------------
+
+
+- name: Check {{ openstack_config.env_file }} exists
+  stat:
+    path: "{{ openstack_config.env_file }}"
+  register: check_openstack_env_file
+
+- name: Create OpenStack Heat env file
+  include_tasks: openstack/setup_env.yml
+  when: not check_openstack_env_file.stat.exists
+
+
+# --- Process heat templates
+
+- name: Create templates directory
+  file:
+    path: "{{ openstack_config.templates_dir }}"
+    state: directory
+
+- name: create resources stacks
+  include_tasks: openstack/setup_stack.yml
   vars:
-    tobiko_infrared_exec_params: >
-      image list --public
-
-
-- name: install cloud image
-  include_tasks: exec/openstack.yml
-  vars:
-    tobiko_infrared_exec_params: >
-      image create "{{ tobiko_infrared_config.setup_test_resources.cirros_image }}"
-        --public
-        --disk-format qcow2
-        --container-format bare
-        --file "{{ tobiko_infrared_config.setup_test_resources.cirros_image_file }}"
-  when: >
-    tobiko_infrared_config.setup_test_resources.cirros_image not in
-      (tobiko_openstack_output | json_query('[*].Name'))
-
-
-- name: list flavors
-  include_tasks: exec/openstack.yml
-  vars:
-    tobiko_infrared_exec_params: >
-      flavor list --public
-
-
-- name: create flavor
-  include_tasks: exec/openstack.yml
-  vars:
-    tobiko_infrared_exec_params: >
-      flavor create --ram 256 --public "{{ tobiko_infrared_config.setup_test_resources.flavor }}"
-  when: >
-    tobiko_infrared_config.setup_test_resources.flavor not in
-      (tobiko_openstack_output | json_query('[*].Name'))
+    template_file: "{{ item }}"
+    template_name: "{{ (item | replace('/', '-') | splitext)[0] }}"
+  with_items: "{{ tobiko_params.hot_templates }}"

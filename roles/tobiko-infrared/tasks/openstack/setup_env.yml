@@ -1,0 +1,126 @@
+
+# --- Load SSH key file
+
+- name: load SSH key file
+  set_fact:
+    public_key: "{{ lookup('file', openstack_config.key_file + '.pub') }}"
+
+
+# --- Setup public network ----------------------------------------------------
+
+- when: not (public_network | default(false))
+  block:
+
+    - name: list networks
+      include_tasks: exec.yml
+      vars:
+        openstack_args: network list --external
+
+    - name: select network
+      set_fact:
+        public_network: >
+          {{ openstack_output |
+             json_query( '[?Name==`' + openstack_config.public_network_name + '`]' ) |
+             first }}
+      when: openstack_output
+
+- name: Show public network details
+  debug:
+    msg: "{{ public_network }}"
+  failed_when: not public_network
+
+
+# --- setup images ------------------------------------------------------------
+
+
+- when: not (cirros_image | default(false))
+  block:
+
+    - name: download Cirros cloud image
+      get_url:
+        url: "{{ openstack_config.cirros_image_url }}"
+        dest: "{{ openstack_config.cirros_image_file }}"
+      register: download_cirros_cloud_image
+
+    - name: list images
+      include_tasks: exec.yml
+      vars:
+        openstack_args: image list --public
+      changed_when: false
+
+    - name: select image
+      set_fact:
+        cirros_image: >
+          {{ openstack_output |
+             json_query( '[?Name==`' + openstack_config.cirros_image_name + '`]' ) |
+             first }}
+      when: openstack_output
+
+    - when: not (cirros_image | default(false))
+      block:
+
+        - name: install cloud image
+          include_tasks: exec.yml
+          vars:
+            openstack_args: >
+              image create "{{ openstack_config.cirros_image_name }}"
+                --public
+                --disk-format qcow2
+                --container-format bare
+                --file "{{ openstack_config.cirros_image_file }}"
+
+        - name: select image
+          set_fact:
+            cirros_image: '{{ openstack_output }}'
+
+- name: Show Cirros image details
+  debug:
+    msg: "{{ cirros_image }}"
+  failed_when: not cirros_image
+
+
+# --- setup flavors -----------------------------------------------------------
+
+
+- when: not (small_flavor | default(false))
+  block:
+
+    - name: list flavors
+      include_tasks: exec.yml
+      vars:
+        openstack_args: flavor list --public
+
+    - name: select flavor
+      set_fact:
+        small_flavor: >
+          {{ openstack_output |
+             json_query( '[?Name==`' + openstack_config.small_flavor_name + '`]' ) |
+             first | default(null) }}
+      when: openstack_output
+
+    - when: not (small_flavor | default(false))
+      block:
+
+        - name: create flavor
+          include_tasks: exec.yml
+          vars:
+            openstack_args: >
+              flavor create --ram 256 --public "{{ openstack_config.small_flavor_name }}"
+
+        - name: select flavor
+          set_fact:
+            small_flavor: "{{ openstack_output }}"
+
+- name: Show small flavor details
+  debug:
+    msg: "{{ small_flavor }}"
+  failed_when: not small_flavor
+
+
+# --- write OpenStack heat resources
+
+
+- name: create OpenStack Heat env file
+  template:
+    src: env.yaml.j2
+    dest: "{{ openstack_config.env_file }}"

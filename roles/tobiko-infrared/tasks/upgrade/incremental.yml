@@ -2,9 +2,9 @@
 ---
 
 - name: set up undercloud upgrade repositories
-  include_tasks: ../exec/infrared.yml
+  include_tasks: ../infrared/exec.yml
   vars:
-    tobiko_infrared_exec_params: >
+    infrared_args: >
       tripleo-undercloud
         --upgrade yes
         --ansible-args="tags=upgrade_repos"
@@ -13,9 +13,9 @@
 
 
 - name: set up undercloud update repositories:
-  include_tasks: ../exec/infrared.yml
+  include_tasks: ../infrared/exec.yml
   vars:
-    tobiko_infrared_exec_params: >
+    infrared_args: >
       tripleo-undercloud
         --update-undercloud yes
         --build latest
@@ -26,25 +26,25 @@
 
 
 - name: upgrade undercloud
-  include_tasks: ../exec/infrared.yml
+  include_tasks: ../infrared/exec.yml
   vars:
-    tobiko_infrared_exec_params: >
+    infrared_args: >
       tripleo-upgrade
         --undercloud-upgrade yes
 
 
 - name: update undercloud
-  include_tasks: ../exec/infrared.yml
+  include_tasks: ../infrared/exec.yml
   vars:
-    tobiko_infrared_exec_params: >
+    infrared_args: >
       tripleo-upgrade
         --undercloud-update yes
 
 
 - name: set up overcloud upgrade repositories
-  include_tasks: ../exec/infrared.yml
+  include_tasks: ../infrared/exec.yml
   vars:
-    tobiko_infrared_exec_params: >
+    infrared_args: >
       tripleo-overcloud
         --deployment-files virt
         --upgrade yes
@@ -54,9 +54,9 @@
 
 
 - name: set up overcloud update repositories/containers
-  include_tasks: ../exec/infrared.yml
+  include_tasks: ../infrared/exec.yml
   vars:
-    tobiko_infrared_exec_params: >
+    infrared_args: >
       tripleo-overcloud
         --deployment-files virt
         --ocupdate True
@@ -65,17 +65,17 @@
 
 
 - name: upgrade overcloud
-  include_tasks: ../exec/infrared.yml
+  include_tasks: ../infrared/exec.yml
   vars:
-    tobiko_infrared_exec_params: >
+    infrared_args: >
       tripleo-upgrade
         --overcloud-upgrade yes
 
 
 - name: udate overcloud
-  include_tasks: ../exec/infrared.yml
+  include_tasks: ../infrared/exec.yml
   vars:
-    tobiko_infrared_exec_params: >
+    infrared_args: >
       tripleo-upgrade
         --overcloud-update yes
 
