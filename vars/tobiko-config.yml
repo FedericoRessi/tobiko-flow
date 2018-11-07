@@ -36,7 +36,7 @@ tobiko:
 
 tobiko-infrared:
 
-  dry_run: true
+  # dry_run: true
 
   virsh:
     # host_address: localhost

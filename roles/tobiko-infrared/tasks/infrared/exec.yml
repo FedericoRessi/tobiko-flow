@@ -31,5 +31,6 @@
     msg: >
       Command infrared {{ infrared_args }} has failed:
       {{ infrared_exec.stderr }}
-  when: infrared_exec is failed
-  when: not tobiko_infrared_config.dry_run
+  when: 
+    - not tobiko_infrared_config.dry_run
+    - infrared_exec is failed
