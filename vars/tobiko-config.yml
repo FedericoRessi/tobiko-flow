@@ -27,11 +27,8 @@ tobiko:
       during_upgrade_cloud:
         - neutron-tempest-plugin
 
-  upgrade_cloud:
-    # skip: true
-
   cleanup:
-    # skip: true
+    skip: false
 
   plugins:
     - tobiko-infrared
@@ -39,7 +36,7 @@ tobiko:
 
 tobiko-infrared:
 
-  # dry_run: true
+  dry_run: true
 
   virsh:
     # host_address: localhost

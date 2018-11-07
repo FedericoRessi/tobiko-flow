@@ -1,6 +1,11 @@
 
 ---
 
+- name: tobiko_config
+  debug:
+    msg: '{{ tobiko_config }}'
+
+
 - name: put upgrade version to tobiko status
   set_fact:
     tobiko_status: >
@@ -9,7 +14,7 @@
            'cloud': {
              'upgrade_version':
                (tobiko_params.version or
-                tobiko_infrared_config.upgrade_cloud.version) | mandatory }},
+                tobiko_config.upgrade_cloud.version) | mandatory }},
            recursive=True) }}
 
 
