@@ -6,7 +6,7 @@ tobiko:
   setup_cloud:
     # skip: true
     # cleanup: false
-    version: 12
+    version: 13
 
   upgrade_cloud:
     version: 13
