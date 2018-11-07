@@ -12,3 +12,5 @@
       vars:
         tobiko_params:
           method: setup_test_resources
+          hot_templates:
+            - hot/floating_ip.yaml

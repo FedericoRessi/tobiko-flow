@@ -2,9 +2,9 @@
 ---
 
 - name: setup OpeStack hypervisor host
-  include_tasks: ../exec.yml
+  include_tasks: ../infrared/exec.yml
   vars:
-    tobiko_infrared_exec_params: >
+    infrared_args: >
       virsh
         --host-address {{ virsh_config.host_address | quote }}
         --host-key {{ virsh_config.host_key | quote }}

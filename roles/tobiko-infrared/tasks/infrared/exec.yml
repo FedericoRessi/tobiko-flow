@@ -1,0 +1,35 @@
+
+---
+
+- name: infrared {{ infrared_args | mandatory }}
+  shell: |
+    source "{{ tobiko_infrared_config.venv_dir }}/bin/activate"
+    log_file="{{ tobiko_infrared_config.log_file }}"
+    args=( {{ infrared_args }} )
+    (set -x; infrared "${args[@]}") 2> "{{ tobiko_infrared_config.log_file }}"
+  args:
+    chdir: "{{ tobiko_infrared_config.src_dir }}"
+    executable: /bin/bash
+  register: infrared_exec
+  ignore_errors: yes
+  when: not tobiko_infrared_config.dry_run
+
+
+- name: write infrared operation to log file
+  lineinfile:
+    insertafter: EOF
+    dest: "{{ tobiko_infrared_config.log_file }}"
+    line: >
+      {{ infrared_exec.stdout }}
+  when:
+    - not tobiko_infrared_config.dry_run
+    - infrared_exec.stdout
+
+
+- name: report Infrared failure
+  fail:
+    msg: >
+      Command infrared {{ infrared_args }} has failed:
+      {{ infrared_exec.stderr }}
+  when: infrared_exec is failed
+  when: not tobiko_infrared_config.dry_run

@@ -6,12 +6,16 @@ tobiko:
   setup_cloud:
     # skip: true
     # cleanup: false
+    version: 12
+
+  upgrade_cloud:
+    version: 13
 
   setup_test_resources:
     # skip: true
 
   run_tests:
-    # skip: true
+    skip: true
     tests:
 
       default:
@@ -23,11 +27,8 @@ tobiko:
       during_upgrade_cloud:
         - neutron-tempest-plugin
 
-  upgrade_cloud:
-    # skip: true
-
   cleanup:
-    # skip: true
+    skip: false
 
   plugins:
     - tobiko-infrared
@@ -35,26 +36,21 @@ tobiko:
 
 tobiko-infrared:
 
-  # dry_run: true
-
-  setup_cloud:
-    version: 10
-
-  upgrade_cloud:
-    version: 13
-    # fast: true
+  dry_run: true
 
   virsh:
-    host_address: localhost
-    host_key: ~/.ssh/id_rsa
+    # host_address: localhost
+    # host_key: ~/.ssh/id_rsa
     host_memory_overcommit: false
 
   tripleo_undercloud:
     mirror: tlv
 
   tripleo_overcloud:
-    # network_dvr: yes
-    overcloud_templates: none
+    network_dvr: yes
+
+  tripleo_upgrade:
+    # fast: true
 
   tempest:
     neutron-tempest-plugin:

@@ -1,0 +1,47 @@
+
+- name: set template path
+  set_fact:
+    template_path: "{{ openstack_config.templates_dir }}/{{ template_name }}.yaml"
+
+
+- name: copy template file
+  copy:
+    src: "{{ template_file }}"
+    dest: "{{ template_path }}"
+
+
+- name: show stack {{ template_name }}
+  include_tasks: exec.yml
+  vars:
+    openstack_args: >
+      stack show "{{ template_name }}"
+  ignore_errors: true
+  register: show_stack
+
+
+- name: create test resources stack - {{ template_name }}
+  include_tasks: exec.yml
+  vars:
+    openstack_args: >
+      stack create "{{ template_name }}"
+        --wait
+        -t "{{ template_path }}"
+        -e "{{ openstack_config.env_file }}"
+  when: openstack_exec is failed
+
+
+- name: update test resources stack - {{ template_name }}
+  include_tasks: exec.yml
+  vars:
+    openstack_args: >
+      stack update "{{ openstack_output }}"
+        --wait
+        -t "{{ template_path }}"
+        -e "{{ openstack_config.env_file }}"
+  when: openstack_exec is not failed
+
+
+- debug:
+    msg: >
+      Stack set up:
+      {{ openstack_output }}

@@ -1,0 +1,35 @@
+
+---
+
+- name: openstack {{ openstack_args | mandatory }}
+  shell: |
+    source {{ openstack_config.rc_file | quote }}
+    args=( {{ openstack_args }} )
+    (set -x; openstack "${args[@]}" -f yaml)
+  args:
+    executable: /bin/bash
+  register: openstack_exec
+  ignore_errors: yes
+  when: not tobiko_infrared_config.dry_run
+
+
+- name: write OpenStack client operation to log file
+  lineinfile:
+     insertafter: EOF
+     dest: "{{ tobiko_infrared_config.log_file }}"
+     line: >
+       "{{ openstack_exec.stderr }}"
+       "{{ openstack_exec.stdout }}"
+
+
+- name: report OpenStack client failure
+  fail:
+    msg: >
+      Command openstack {{ openstack_args }} has failed:
+      {{ openstack_exec.stderr }}
+  when: openstack_exec is failed
+
+
+- name: parse OpenStack client output
+  set_fact:
+    openstack_output: '{{ openstack_exec.stdout | from_yaml }}'

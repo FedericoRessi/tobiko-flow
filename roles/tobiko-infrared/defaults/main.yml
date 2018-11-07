@@ -9,10 +9,13 @@ tobiko_infrared_default_config:
   src_dir: "{{ tobiko_config.work_dir }}/infrared/src/infrared"
   venv_dir: "{{ tobiko_config.work_dir }}/infrared"
   log_file: "{{ tobiko_config.log_dir }}/infrared.log"
+  out_file: "{{ tobiko_config.var_dir }}/infrared-stdout.txt"
+  err_file: "{{ tobiko_config.var_dir }}/infrared-stderr.txt"
+
+  mirror:
 
   setup_cloud:
     skip:
-    varsion:
 
   setup_test_resources:
     skip:
@@ -22,27 +25,38 @@ tobiko_infrared_default_config:
 
   upgrade_cloud:
     skip:
-    version:
-    fast: false
 
   cleanup:
     skip:
 
   virsh:
-    host_address:
-    host_key:
+    host_address: localhost
+    host_key: ~/.ssh/id_rsa
     host_memory_overcommit:
     topology_nodes:
       - "undercloud:1"
       - "controller:1"
       - "compute:2"
 
-  tripleo_undercloud:
-    mirror:
+  openstack:
+    rc_file: "{{ tobiko_config.work_dir }}/infrared/overcloudrc"
+    env_file: "{{ tobiko_config.work_dir }}/infrared/overcloud-env.yml"
+    key_file: ~/.ssh/id_rsa
+    cirros_image_url: "http://download.cirros-cloud.net/0.4.0/cirros-0.4.0-x86_64-disk.img"
+    cirros_image_file: "{{ tobiko_config.work_dir }}/infrared/cirros-0.4.0-x86_64-disk.img"
+    cirros_image_name: cirros-0.4.0
+    small_flavor_name: small
+    public_network_name: nova
+    templates_dir: "{{ tobiko_config.var_dir }}/templates"
+
+  tripleo_undercloud: {}
 
   tripleo_overcloud:
     network_dvr: no
     overcloud_templates: none
+
+  tripleo_upgrade:
+    fast: false
 
   tempest:
     default:

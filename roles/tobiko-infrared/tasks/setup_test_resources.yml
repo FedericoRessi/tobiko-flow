@@ -1,2 +1,46 @@
 
 ---
+
+- name: import Opensack configuration
+  set_fact:
+    openstack_config: '{{ tobiko_infrared_config.openstack }}'
+
+
+# --- Setup OpenStack client --------------------------------------------------
+
+- name: Check {{ openstack_config.rc_file }} exists
+  stat:
+    path: "{{ openstack_config.rc_file }}"
+  register: check_openstack_rc_file
+
+- name: Create OpenStack RC file
+  include_tasks: openstack/setup_rc.yml
+  when: not check_openstack_rc_file.stat.exists
+
+
+# --- Setup OpenStack Heat client --------------------------------------------------
+
+
+- name: Check {{ openstack_config.env_file }} exists
+  stat:
+    path: "{{ openstack_config.env_file }}"
+  register: check_openstack_env_file
+
+- name: Create OpenStack Heat env file
+  include_tasks: openstack/setup_env.yml
+  when: not check_openstack_env_file.stat.exists
+
+
+# --- Process heat templates
+
+- name: Create templates directory
+  file:
+    path: "{{ openstack_config.templates_dir }}"
+    state: directory
+
+- name: create resources stacks
+  include_tasks: openstack/setup_stack.yml
+  vars:
+    template_file: "{{ item }}"
+    template_name: "{{ (item | replace('/', '-') | splitext)[0] }}"
+  with_items: "{{ tobiko_params.hot_templates }}"

@@ -8,19 +8,21 @@
       tripleo-undercloud
         --upgrade yes
         --ansible-args="tags=upgrade_repos"
+
         {{ tobiko_infrared_mirror }}
 
 
-# - name: set up undercloud update repositories:
-#   include_tasks: ../infrared/exec.yml
-#   vars:
-#     infrared_args: >
-#       tripleo-undercloud
-#         --update-undercloud yes
-#         --build latest
-#         --version {{ initial_version | quote }}
-#         --ansible-args="tags=upgrade_repos"
-#         {{ tobiko_infrared_mirror }}
+- name: set up undercloud update repositories:
+  include_tasks: ../infrared/exec.yml
+  vars:
+    infrared_args: >
+      tripleo-undercloud
+        --update-undercloud yes
+        --build {{ final_version | quote }}
+        --version {{ initial_version | quote }}
+        --ansible-args="tags=upgrade_repos"
+
+        {{ tobiko_infrared_mirror }}
 
 
 - name: upgrade undercloud
@@ -31,12 +33,12 @@
         --undercloud-upgrade yes
 
 
-# - name: update undercloud
-#   include_tasks: ../infrared/exec.yml
-#   vars:
-#     infrared_args: >
-#       tripleo-upgrade
-#         --undercloud-update yes
+- name: update undercloud
+  include_tasks: ../infrared/exec.yml
+  vars:
+    infrared_args: >
+      tripleo-upgrade
+        --undercloud-update yes
 
 
 - name: set up overcloud upgrade repositories
@@ -47,18 +49,19 @@
         --deployment-files virt
         --upgrade yes
         --ansible-args="tags=upgrade_collect_info,upgrade_repos"
+
         {{ tobiko_infrared_mirror }}
 
 
-# - name: set up overcloud update repositories/containers
-#   include_tasks: ../infrared/exec.yml
-#   vars:
-#     infrared_args: >
-#       tripleo-overcloud
-#         --deployment-files virt
-#         --ocupdate True
-#         --build {{ final_version | quote }}
-#         --ansible-args="tags=update_collect_info,update_undercloud_validation,update_repos,update_prepare_containers"
+- name: set up overcloud update repositories/containers
+  include_tasks: ../infrared/exec.yml
+  vars:
+    infrared_args: >
+      tripleo-overcloud
+        --deployment-files virt
+        --ocupdate True
+        --build {{ final_version | quote }}
+        --ansible-args="tags=update_collect_info,update_undercloud_validation,update_repos,update_prepare_containers"
 
 
 - name: upgrade overcloud
@@ -69,12 +72,12 @@
         --overcloud-upgrade yes
 
 
-# - name: udate overcloud
-#   include_tasks: ../infrared/exec.yml
-#   vars:
-#     infrared_args: >
-#       tripleo-upgrade
-#         --overcloud-update yes
+- name: udate overcloud
+  include_tasks: ../infrared/exec.yml
+  vars:
+    infrared_args: >
+      tripleo-upgrade
+        --overcloud-update yes
 
 
 - name: incremental upgrade from {{ initial_version }} to {{ final_version }} complete
