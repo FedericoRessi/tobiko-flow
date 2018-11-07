@@ -41,13 +41,13 @@ tobiko-infrared:
   virsh:
     # host_address: localhost
     # host_key: ~/.ssh/id_rsa
-    host_memory_overcommit: false
+    # host_memory_overcommit: true
 
   tripleo_undercloud:
     mirror: tlv
 
   tripleo_overcloud:
-    network_dvr: yes
+    # network_dvr: no
 
   tripleo_upgrade:
     # fast: true

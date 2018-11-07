@@ -32,7 +32,7 @@ tobiko_infrared_default_config:
   virsh:
     host_address: localhost
     host_key: ~/.ssh/id_rsa
-    host_memory_overcommit:
+    host_memory_overcommit: false
     topology_nodes:
       - "undercloud:1"
       - "controller:1"
