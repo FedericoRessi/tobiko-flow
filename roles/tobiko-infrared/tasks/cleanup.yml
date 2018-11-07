@@ -10,14 +10,3 @@
         --host-key "{{ tobiko_infrared_config.virsh.host_key }}"
         --cleanup yes
 
-
-- name: remove files
-  file:
-    path: "{{ item }}"
-    state: absent
-  with_items:
-    - "{{ tobiko_infrared_config.src_dir }}"
-    - "{{ tobiko_infrared_config.log_file }}"
-    - "{{ tobiko_infrared_config.venv_dir }}"
-    - "{{ tobiko_infrared_config.out_file }}"
-    - "{{ tobiko_infrared_config.err_file }}"
