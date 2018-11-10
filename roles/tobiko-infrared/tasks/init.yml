@@ -34,16 +34,12 @@
   when: tobiko_infrared_get_sources is changed
 
 
-- name: check infrared plugins are working
+- name: install InfraRed plugins
   include_tasks: ../infrared/exec.yml
   vars:
     infrared_args: >
-      {{ item }} --help
-  with_items:
-    - virsh
-    - tripleo-undercloud
-    - tripleo-overcloud
-    - tripleo-upgrade
+      plugin add all
+    check: false
 
 
 - name: simlink plugin roles into InfraRed tripleo-upgrade plugin
