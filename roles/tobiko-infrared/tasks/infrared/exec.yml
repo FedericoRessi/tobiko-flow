@@ -31,5 +31,5 @@
           Command infrared {{ infrared_args }} has failed:
           {{ infrared_exec.stderr }}
       when: 
-        - check
+        - check | default(true)
         - infrared_exec is failed
