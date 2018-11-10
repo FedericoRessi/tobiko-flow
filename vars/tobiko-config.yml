@@ -38,7 +38,7 @@ tobiko-infrared:
 
   # dry_run: true
 
-  virsh:
+  virsh: {}
     # host_address: localhost
     # host_key: ~/.ssh/id_rsa
     # host_memory_overcommit: true
