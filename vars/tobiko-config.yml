@@ -38,7 +38,8 @@ tobiko-infrared:
 
   # dry_run: true
 
-  virsh: {}
+  virsh:
+    image_url: "http://rhos-qe-mirror-tlv.usersys.redhat.com/brewroot/packages/rhel-guest-image/7.6/210/images/rhel-guest-image-7.6-210.x86_64.qcow2"
     # host_address: localhost
     # host_key: ~/.ssh/id_rsa
     # host_memory_overcommit: true

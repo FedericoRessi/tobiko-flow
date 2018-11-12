@@ -12,6 +12,7 @@ tobiko_infrared_default_config:
   out_file: "{{ tobiko_config.var_dir }}/infrared-stdout.txt"
   err_file: "{{ tobiko_config.var_dir }}/infrared-stderr.txt"
 
+  update_sources: false
   mirror:
 
   setup_cloud:
@@ -36,6 +37,7 @@ tobiko_infrared_default_config:
     host_address: localhost
     host_key: ~/.ssh/id_rsa
     host_memory_overcommit: false
+    image_url:
     topology_nodes:
       - "undercloud:1"
       - "controller:1"

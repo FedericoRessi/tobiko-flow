@@ -3,7 +3,7 @@
 
 - name: check virsh provision file exists
   stat:
-    path: "{{ tobiko_infrared_config.virsh.prov_file }}"
+    path: "{{ virsh_config.prov_file }}"
   register: virsh_prov_file_stat
 
 
@@ -12,7 +12,7 @@
   vars:
     infrared_args: >
       virsh
-        --from-file={{ tobiko_infrared_config.virsh.prov_file | quote }}
+        --from-file={{ virsh_config.prov_file | quote }}
         --cleanup yes
   when: virsh_prov_file_stat.stat.exists
 
@@ -22,5 +22,5 @@
     path: "{{ item }}"
     state: absent
   with_items:
-    - "{{ tobiko_infrared_config.virsh.prov_file }}"
-    - "{{ tobiko_infrared_config.virsh.generated_prov_file }}"
+    - "{{ virsh_config.prov_file }}"
+    - "{{ virsh_config.generated_prov_file }}"

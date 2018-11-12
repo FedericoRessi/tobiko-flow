@@ -3,10 +3,11 @@
 
 - name: setup virsh provision file
   ini_file:
-    dest: "{{ tobiko_infrared_config.virsh.prov_file }}"
+    dest: "{{ virsh_config.prov_file }}"
     section: virsh
     option: "{{ item.option }}"
     value: "{{ item.value }}"
+  when: item.when | default(true)
   with_items:
     - option: host-address
       value: "{{ virsh_config.host_address }}"
@@ -14,10 +15,13 @@
       value: "{{ virsh_config.host_key }}"
     - option: host-user
       value: "{{ virsh_config.host_user }}"
-    - option: topology-nodes
-      value: "{{ virsh_config.topology_nodes | join(',') }}"
     - option: host-memory-overcommit
       value: "{{ virsh_config.host_memory_overcommit }}"
+    - option: image-url
+      value: "{{ virsh_config.image_url }}"
+      when: "{{ virsh_config.image_url }}"
+    - option: topology-nodes
+      value: "{{ virsh_config.topology_nodes | join(',') }}"
   register: update_virsh_prov_file
 
 
@@ -26,8 +30,7 @@
   vars:
     infrared_args: >
       virsh
-        --from-file {{ tobiko_infrared_config.virsh.prov_file | quote }}
-        --generate-answers-file
-          {{ tobiko_infrared_config.virsh.generated_prov_file | quote }}
+        --from-file {{ virsh_config.prov_file | quote }}
+        --generate-answers-file {{ virsh_config.generated_prov_file | quote }}
 
   when: update_virsh_prov_file is changed
