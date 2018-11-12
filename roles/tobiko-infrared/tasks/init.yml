@@ -39,7 +39,7 @@
   vars:
     infrared_args: >
       plugin add all
-    check: false
+    check_infrared_exec_result: false
 
 
 - name: simlink plugin roles into InfraRed tripleo-upgrade plugin

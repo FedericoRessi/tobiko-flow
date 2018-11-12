@@ -7,29 +7,33 @@
     - name: infrared {{ infrared_args | mandatory }}
       shell: |
         source "{{ tobiko_infrared_config.venv_dir }}/bin/activate"
+        # append infrared STDERR to below log file
         log_file="{{ tobiko_infrared_config.log_file }}"
+        # assign args to an array to smartly cleanup all whitespaces chars
+        # (including new-lines, tabs, ...)
         args=( {{ infrared_args }} )
-        (set -x; infrared "${args[@]}") 2> "{{ tobiko_infrared_config.log_file }}"
+        (set -x; infrared "${args[@]}") 2>> "${log_file}"
       args:
+        # infrared can only be executed from InfraRed source directory
         chdir: "{{ tobiko_infrared_config.src_dir }}"
         executable: /bin/bash
       register: infrared_exec
       ignore_errors: yes
 
-    - name: write infrared operation to log file
+    - name: append InfraRed STDOUT to log file
       lineinfile:
         insertafter: EOF
         dest: "{{ tobiko_infrared_config.log_file }}"
         line: >
-          {{ infrared_exec.stdout }}
+          STDOUT: {{ infrared_exec.stdout }}
       when:
         - infrared_exec.stdout
 
-    - name: report Infrared failure
+    - name: check InfraRed result
       fail:
         msg: >
-          Command infrared {{ infrared_args }} has failed:
+          Command 'infrared {{ infrared_args }}' has failed:
           {{ infrared_exec.stderr }}
-      when: 
-        - check | default(true)
+      when:
+        - check_infrared_exec_result | default(true)
         - infrared_exec is failed
