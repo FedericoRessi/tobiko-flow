@@ -25,7 +25,7 @@
         insertafter: EOF
         dest: "{{ tobiko_infrared_config.log_file }}"
         line: >
-          STDOUT: {{ infrared_exec.stdout }}
+          {{ infrared_exec.stdout }}
       when:
         - infrared_exec.stdout
 

@@ -39,7 +39,6 @@
   vars:
     infrared_args: >
       plugin add all
-    check_infrared_exec_result: false
 
 
 - name: simlink plugin roles into InfraRed tripleo-upgrade plugin
@@ -47,8 +46,6 @@
     src: "{{ tobiko_infrared_config.src_dir }}/plugins"
     dest: "{{ tobiko_infrared_config.src_dir }}/plugins/tripleo-upgrade/infrared_plugin/roles"
     state: link
-  when:
-    - infrared_exec is succeeded
 
 
 - name: set mirror infrared option
