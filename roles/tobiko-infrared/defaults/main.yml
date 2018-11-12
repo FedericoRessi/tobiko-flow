@@ -30,6 +30,9 @@ tobiko_infrared_default_config:
     skip:
 
   virsh:
+    prov_file: "{{ tobiko_config.var_dir }}/virsh_prov.ini"
+    generated_prov_file: "{{ tobiko_config.var_dir }}/generated_virsh_prov.ini"
+    host_user: root
     host_address: localhost
     host_key: ~/.ssh/id_rsa
     host_memory_overcommit: false

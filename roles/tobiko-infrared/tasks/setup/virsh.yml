@@ -1,13 +1,33 @@
 
 ---
 
-- name: setup OpeStack hypervisor host
+- name: setup virsh provision file
+  ini_file:
+    dest: "{{ tobiko_infrared_config.virsh.prov_file }}"
+    section: virsh
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+  with_items:
+    - option: host-address
+      value: "{{ virsh_config.host_address }}"
+    - option: host-key
+      value: "{{ virsh_config.host_key }}"
+    - option: host-user
+      value: "{{ virsh_config.host_user }}"
+    - option: topology-nodes
+      value: "{{ virsh_config.topology_nodes | join(',') }}"
+    - option: host-memory-overcommit
+      value: "{{ virsh_config.host_memory_overcommit }}"
+  register: update_virsh_prov_file
+
+
+- name: setup hypervisor host
   include_tasks: ../infrared/exec.yml
   vars:
     infrared_args: >
       virsh
-        --host-address {{ virsh_config.host_address | quote }}
-        --host-key {{ virsh_config.host_key | quote }}
-        --topology-nodes {{ virsh_config.topology_nodes | join(',') | quote }}
-        --host-memory-overcommit {{ virsh_config.host_memory_overcommit |
-                                    quote }}
+        --from-file {{ tobiko_infrared_config.virsh.prov_file | quote }}
+        --generate-answers-file
+          {{ tobiko_infrared_config.virsh.generated_prov_file | quote }}
+
+  when: update_virsh_prov_file is changed

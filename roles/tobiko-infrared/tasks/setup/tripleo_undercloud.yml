@@ -1,19 +1,22 @@
 
 ---
 
-- name: setup OpenStack undercoud host
+# - name: setup OpenStack undercoud host
+#   include_tasks: ../infrared/exec.yml
+#   vars:
+#     infrared_args: >
+#       tripleo-undercloud
+#         --version {{ tobiko_status.cloud.setup_version | quote }}
+#         {% if tobiko_infrared_config.mirror }
+#           --mirror {{ tobiko_infrared_config.mirror }}
+#         {% endif }
+
+- name: deploy TripleO  undercoud
   include_tasks: ../infrared/exec.yml
   vars:
     infrared_args: >
       tripleo-undercloud
         --version {{ tobiko_status.cloud.setup_version | quote }}
-
-- name: populate OpenStack undercoud
-  include_tasks: ../infrared/exec.yml
-  vars:
-    infrared_args: >
-      tripleo-undercloud
         --images-task rpm
         --images-update yes
-
         {{ tobiko_infrared_mirror }}
