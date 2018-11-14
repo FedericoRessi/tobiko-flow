@@ -47,11 +47,13 @@ tobiko-infrared:
   tripleo_undercloud:
     mirror: tlv
 
-  tripleo_overcloud:
+  tripleo_overcloud: {}
     # network_dvr: no
 
-  tripleo_upgrade:
+  tripleo_upgrade: {}
     # fast: true
+
+  cloud_config: {}
 
   tempest:
     neutron-tempest-plugin:

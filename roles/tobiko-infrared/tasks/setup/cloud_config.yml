@@ -1,0 +1,8 @@
+- name: configure OpenStack cloud after deploy
+  include_tasks: ../infrared/exec.yml
+  vars:
+    infrared_args: >
+      cloud-config
+        -o {{ cloud_config.output_file | quote }}
+        --deployment-files {{ cloud_config.deployment_files | quote }}
+        --tasks {{ cloud_config.tasks | join(',') | quote }}

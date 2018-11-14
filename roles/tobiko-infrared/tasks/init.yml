@@ -17,6 +17,7 @@
     virsh_config: "{{ tobiko_infrared_config.virsh }}"
     tripleo_undercloud_config: "{{ tobiko_infrared_config.tripleo_undercloud }}"
     tripleo_overcloud_config: "{{ tobiko_infrared_config.tripleo_overcloud }}"
+    cloud_config: "{{ tobiko_infrared_config.cloud_config }}"
     tobiko_infrared_mirror: >
       {% if (tobiko_infrared_config.mirror | default(false)) %}
          --mirror {{ tobiko_infrared_config.mirror | quote }}

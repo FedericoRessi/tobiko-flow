@@ -13,21 +13,12 @@
            recursive=True) }}
 
 
-- include_tasks: "setup/virsh.yml"
-  vars:
-    virsh_config: "{{ tobiko_infrared_config.virsh }}"
-
-
-- include_tasks: "setup/tripleo_undercloud.yml"
-  vars:
-    tripleo_undercloud_config: >
-      {{ tobiko_infrared_config.tripleo_undercloud }}
-
-
-- include_tasks: "setup/tripleo_overcloud.yml"
-  vars:
-    tripleo_overcloud_config: >
-      {{ tobiko_infrared_config.tripleo_overcloud }}
+- include_tasks: "setup/{{ item }}"
+  with_items:
+    - virsh.yml
+    - tripleo_undercloud.yml
+    - tripleo_overcloud.yml
+    - cloud_config.yml
 
 
 - name: setup {{ tobiko_params.version }} complete

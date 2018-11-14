@@ -60,6 +60,15 @@ tobiko_infrared_default_config:
     network_dvr: no
     overcloud_templates: none
 
+  cloud_config:
+    output_file: "{{ tobiko_config.var_dir }}/cloud-config.yml"
+    deployment_files: virt
+    tasks:
+      - create_external_network
+      - forward_overcloud_dashboard
+      - network_time
+      - tempest_deployer_input
+
   tripleo_upgrade:
     fast: false
 
