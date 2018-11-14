@@ -12,7 +12,6 @@
         --vbmc-force False
         --tagging no
         --deploy no
-        --post no
 
 - name: tag OpenStack overcloud nodes
   include_tasks: ../infrared/exec.yml
@@ -24,7 +23,6 @@
         --introspect no
         --tagging yes
         --deploy no
-        --post no
 
 - name: deploy OpenStack overcloud nodes
   include_tasks: ../infrared/exec.yml
@@ -36,7 +34,6 @@
         --introspect no
         --tagging no
         --deploy yes
-        --post no
         --overcloud-debug yes
         --overcloud-ssl no
         --overcloud-templates {{ tripleo_overcloud_config.overcloud_templates | quote}}
